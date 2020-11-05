@@ -13,6 +13,8 @@ using Microsoft.Extensions.Logging;
 
 namespace Syrinx.API
 {
+    using Syrinx.Base.Common;
+
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -46,6 +48,19 @@ namespace Syrinx.API
             {
                 endpoints.MapControllers();
             });
+
+            LoadSettings();
+        }
+
+        /// <summary>
+        /// º”‘ÿ≈‰÷√Œƒº˛
+        /// </summary>
+        private void LoadSettings()
+        {
+            AppSettings.RabbitMQHostName = Configuration["rabbitmq:hostName"];
+            AppSettings.RabbitMQPort = Convert.ToInt32(Configuration["rabbitmq:port"]);
+            AppSettings.RabbitMQUserName = Configuration["rabbitmq:userName"];
+            AppSettings.RabbitMQPassword = Configuration["rabbitmq:password"];
         }
     }
 }
