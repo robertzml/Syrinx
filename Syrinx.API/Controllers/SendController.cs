@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.Text.Encodings.Web;
+using System.Text.Json;
+using System.Text.Unicode;
 
 namespace Syrinx.API.Controllers
 {
+    using Syrinx.API.Models;
     using Syrinx.API.MQ;
+    using Syrinx.API.Utility;
     using Syrinx.Core.Entity;
 
     /// <summary>
@@ -32,30 +32,24 @@ namespace Syrinx.API.Controllers
         #endregion //Constructor
 
         #region Action
-        [HttpPost]
-        public ActionResult<string> HeartBeat(SendOption obj)
-        {
-            Publisher publisher = new Publisher();
-            publisher.Send(obj.msg);
-
-            return "success";
-        }
-
         /// <summary>
         /// 设备控制
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public ActionResult<string> Control(EquipmentControl model)
+        public ActionResult<ResponseData<int>> Control(EquipmentControl model)
         {
-            this._messageQueue.Push("ss");
-            return "success";
+            var serializeOptions = new JsonSerializerOptions
+            {
+                Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            };
+
+            var msg = JsonSerializer.Serialize<EquipmentControl>(model, serializeOptions);
+
+            this._messageQueue.Push(msg);
+            return RestHelper<int>.MakeResponse(0, 0, "success");
         }
         #endregion // Action
-    }
-
-    public class SendOption
-    {
-        public string msg { get; set; }
     }
 }

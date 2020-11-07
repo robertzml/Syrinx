@@ -1,0 +1,19 @@
+﻿version: "3.7"
+services:
+  syrinx:
+    build:
+      context: .
+    image: syrinx
+    container_name: syrinx-1
+    ports:
+      - "5000:5000"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1g"
+        max-file: "5"
+    networks:
+      artemis-net:
+networks:
+  artemis-net:
+    name: artemis-network
