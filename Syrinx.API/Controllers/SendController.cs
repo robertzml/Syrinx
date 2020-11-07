@@ -7,11 +7,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Syrinx.API.Controllers
 {
-    using Microsoft.VisualBasic;
     using Syrinx.API.MQ;
+    using Syrinx.Core.Entity;
 
     /// <summary>
-    /// 下发控制器
+    /// 设备操作下发控制器
     /// </summary>
     [Route("api/[controller]/[action]")]
     [ApiController]
@@ -24,6 +24,16 @@ namespace Syrinx.API.Controllers
             Publisher publisher = new Publisher();
             publisher.Send(obj.msg);
 
+            return "success";
+        }
+
+        /// <summary>
+        /// 设备控制
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public ActionResult<string> Control(EquipmentControl model)
+        {
             return "success";
         }
         #endregion // Action

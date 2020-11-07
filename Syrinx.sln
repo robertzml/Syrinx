@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30621.155
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Syrinx.API", "Syrinx.API\Syrinx.API.csproj", "{AD52A1CB-3261-48F6-BD10-B841EC96C482}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Syrinx.API", "Syrinx.API\Syrinx.API.csproj", "{AD52A1CB-3261-48F6-BD10-B841EC96C482}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Syrinx.Base", "Syrinx.Base\Syrinx.Base.csproj", "{A664ED17-26DF-4387-AFAE-694FDF98F122}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Syrinx.Base", "Syrinx.Base\Syrinx.Base.csproj", "{A664ED17-26DF-4387-AFAE-694FDF98F122}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Syrinx.Core", "Syrinx.Core\Syrinx.Core.csproj", "{A7AF9C6B-CB0B-4934-856F-3CA3F010C8BD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{A664ED17-26DF-4387-AFAE-694FDF98F122}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A664ED17-26DF-4387-AFAE-694FDF98F122}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A664ED17-26DF-4387-AFAE-694FDF98F122}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7AF9C6B-CB0B-4934-856F-3CA3F010C8BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7AF9C6B-CB0B-4934-856F-3CA3F010C8BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7AF9C6B-CB0B-4934-856F-3CA3F010C8BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7AF9C6B-CB0B-4934-856F-3CA3F010C8BD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

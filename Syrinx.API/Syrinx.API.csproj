@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Syrinx.Base\Syrinx.Base.csproj" />
+    <ProjectReference Include="..\Syrinx.Core\Syrinx.Core.csproj" />
   </ItemGroup>
 
 
