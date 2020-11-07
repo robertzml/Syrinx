@@ -8,6 +8,7 @@ using RabbitMQ.Client.Events;
 
 namespace Syrinx.API.MQ
 {
+    using Microsoft.Extensions.Options;
     using Syrinx.Base.Common;   
 
     public class Publisher
@@ -18,7 +19,8 @@ namespace Syrinx.API.MQ
         private readonly string queueName = "ControlQueue";
 
         public void Send(string text)
-        {
+        {           
+
             IConnectionFactory factory = new ConnectionFactory()
             {
                 HostName = AppSettings.RabbitMQHostName,

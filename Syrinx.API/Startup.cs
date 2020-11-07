@@ -13,6 +13,8 @@ using Microsoft.Extensions.Logging;
 
 namespace Syrinx.API
 {
+    using Syrinx.API.Options;
+    using Syrinx.API.MQ;
     using Syrinx.Base.Common;
 
     public class Startup
@@ -27,7 +29,13 @@ namespace Syrinx.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // 注入RabbitMQ配置
+            services.Configure<RabbitOptions>(Configuration.GetSection("RabbitMQ"));
+
             services.AddControllers();
+            
+            // 注入消息队列
+            services.AddSingleton<IMessageQueue, RabbitQueue>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -47,20 +55,7 @@ namespace Syrinx.API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-            });
-
-            LoadSettings();
-        }
-
-        /// <summary>
-        /// 加载配置文件
-        /// </summary>
-        private void LoadSettings()
-        {
-            AppSettings.RabbitMQHostName = Configuration["rabbitmq:hostName"];
-            AppSettings.RabbitMQPort = Convert.ToInt32(Configuration["rabbitmq:port"]);
-            AppSettings.RabbitMQUserName = Configuration["rabbitmq:userName"];
-            AppSettings.RabbitMQPassword = Configuration["rabbitmq:password"];
+            });            
         }
     }
 }

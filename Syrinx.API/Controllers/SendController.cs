@@ -17,6 +17,20 @@ namespace Syrinx.API.Controllers
     [ApiController]
     public class SendController : ControllerBase
     {
+        #region Field
+        /// <summary>
+        /// 消息队列
+        /// </summary>
+        private IMessageQueue _messageQueue;
+        #endregion //Field
+
+        #region Constructor
+        public SendController(IMessageQueue messageQueue)
+        {
+            this._messageQueue = messageQueue;
+        }
+        #endregion //Constructor
+
         #region Action
         [HttpPost]
         public ActionResult<string> HeartBeat(SendOption obj)
@@ -34,6 +48,7 @@ namespace Syrinx.API.Controllers
         /// <returns></returns>
         public ActionResult<string> Control(EquipmentControl model)
         {
+            this._messageQueue.Push("ss");
             return "success";
         }
         #endregion // Action
