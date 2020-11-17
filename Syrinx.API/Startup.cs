@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -10,12 +6,18 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
 
 namespace Syrinx.API
 {
     using Syrinx.API.Options;
     using Syrinx.API.MQ;
-    using Syrinx.Base.Common;
 
     public class Startup
     {
@@ -33,7 +35,20 @@ namespace Syrinx.API
             services.Configure<RabbitOptions>(Configuration.GetSection("RabbitMQ"));
 
             services.AddControllers();
-            
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Syrinx.API", Version = "v1" });
+
+                //// Set the comments path for the Swagger JSON and UI.
+                //var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                //var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                //c.IncludeXmlComments(xmlPath);
+
+                //var coreXmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.Core.xml";
+                //var coreXmlPath = Path.Combine(AppContext.BaseDirectory, coreXmlFile);
+                //c.IncludeXmlComments(coreXmlPath);
+            });
+
             // 注入消息队列
             services.AddSingleton<IMessageQueue, RabbitQueue>();
         }
@@ -44,6 +59,8 @@ namespace Syrinx.API
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseSwagger();
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Syrinx.API v1"));
             }
 
             app.UseHttpsRedirection();
@@ -55,7 +72,7 @@ namespace Syrinx.API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-            });            
+            });
         }
     }
 }

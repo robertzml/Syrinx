@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Unicode;
@@ -22,12 +23,15 @@ namespace Syrinx.API.Controllers
         /// 消息队列
         /// </summary>
         private IMessageQueue _messageQueue;
+
+        private ILogger<SendController> _logger;
         #endregion //Field
 
         #region Constructor
-        public SendController(IMessageQueue messageQueue)
+        public SendController(IMessageQueue messageQueue, ILogger<SendController> logger)
         {
             this._messageQueue = messageQueue;
+            this._logger = logger;
         }
         #endregion //Constructor
 
@@ -37,6 +41,7 @@ namespace Syrinx.API.Controllers
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
+        [HttpPost]
         public ActionResult<ResponseData<int>> Control(EquipmentControl model)
         {
             var serializeOptions = new JsonSerializerOptions
@@ -46,6 +51,7 @@ namespace Syrinx.API.Controllers
             };
 
             var msg = JsonSerializer.Serialize<EquipmentControl>(model, serializeOptions);
+            this._logger.LogInformation(msg);
 
             this._messageQueue.Push(msg);
             return RestHelper<int>.MakeResponse(0, 0, "success");
