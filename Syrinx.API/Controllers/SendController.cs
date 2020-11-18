@@ -14,6 +14,7 @@ namespace Syrinx.API.Controllers
     /// <summary>
     /// 设备操作下发控制器
     /// </summary>
+    [Produces("application/json")]
     [Route("api/[controller]/[action]")]
     [ApiController]
     public class SendController : ControllerBase
@@ -40,7 +41,18 @@ namespace Syrinx.API.Controllers
         /// 设备控制
         /// </summary>
         /// <param name="model"></param>
-        /// <returns></returns>
+        /// <returns>控制结果</returns>
+        /// <remarks>
+        /// Sample Request:
+        /// 
+        ///     POST /control
+        ///     {
+        ///         "serialNumber": "123456",
+        ///         "deviceType": 1,
+        ///         "controlType": 1,
+        ///         "option": 1
+        ///      }
+        /// </remarks>
         [HttpPost]
         public ActionResult<ResponseData<int>> Control(EquipmentControl model)
         {

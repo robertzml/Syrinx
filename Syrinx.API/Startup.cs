@@ -37,16 +37,16 @@ namespace Syrinx.API
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Syrinx.API", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Syrinx API", Version = "v1" });
 
-                //// Set the comments path for the Swagger JSON and UI.
-                //var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                //var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                //c.IncludeXmlComments(xmlPath);
+                // Set the comments path for the Swagger JSON and UI.
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
 
-                //var coreXmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.Core.xml";
-                //var coreXmlPath = Path.Combine(AppContext.BaseDirectory, coreXmlFile);
-                //c.IncludeXmlComments(coreXmlPath);
+                var coreXmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml".Replace("API", "Core");  
+                var coreXmlPath = Path.Combine(AppContext.BaseDirectory, coreXmlFile);
+                c.IncludeXmlComments(coreXmlPath);
             });
 
             // 注入消息队列
@@ -60,7 +60,14 @@ namespace Syrinx.API
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Syrinx.API v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Syrinx API v1"));
+
+                app.UseReDoc(c =>
+                {
+                    c.SpecUrl("/swagger/v1/swagger.json");
+                    c.RoutePrefix = "api-docs";
+                    c.DocumentTitle = "Syrinx API V1";
+                });
             }
 
             app.UseHttpsRedirection();

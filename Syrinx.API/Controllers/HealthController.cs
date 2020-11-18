@@ -13,13 +13,14 @@ namespace Syrinx.API.Controllers
     /// <summary>
     /// 健康检查控制器
     /// </summary>
-    [Route("api/[controller]/[action]")]
+    [Produces("application/json")]
+    [Route("api/[controller]")]
     [ApiController]
     public class HealthController : ControllerBase
     {
         #region Action
         /// <summary>
-        /// 设备控制
+        /// 健康检查
         /// </summary>
         /// <returns></returns>
         [HttpGet]
