@@ -26,6 +26,11 @@ namespace Syrinx.API.Controllers
         private IMessageQueue _messageQueue;
 
         private ILogger<SendController> _logger;
+
+        /// <summary>
+        /// 序列化参数
+        /// </summary>
+        private JsonSerializerOptions serializeOptions;
         #endregion //Field
 
         #region Constructor
@@ -33,6 +38,12 @@ namespace Syrinx.API.Controllers
         {
             this._messageQueue = messageQueue;
             this._logger = logger;
+
+            this.serializeOptions = new JsonSerializerOptions
+            {
+                Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            };
         }
         #endregion //Constructor
 
@@ -40,7 +51,7 @@ namespace Syrinx.API.Controllers
         /// <summary>
         /// 设备控制
         /// </summary>
-        /// <param name="model"></param>
+        /// <param name="model">控制参数</param>
         /// <returns>控制结果</returns>
         /// <remarks>
         /// Sample Request:
@@ -50,22 +61,44 @@ namespace Syrinx.API.Controllers
         ///         "serialNumber": "123456",
         ///         "deviceType": 1,
         ///         "controlType": 1,
-        ///         "option": 1
+        ///         "controlType": 1,
+        ///         "controlType": 1,
         ///      }
         /// </remarks>
         [HttpPost]
         public ActionResult<ResponseData<int>> Control(EquipmentControl model)
         {
-            var serializeOptions = new JsonSerializerOptions
-            {
-                Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-            };
-
             var msg = JsonSerializer.Serialize<EquipmentControl>(model, serializeOptions);
             this._logger.LogInformation(msg);
 
-            this._messageQueue.Push(msg);
+            this._messageQueue.PushControl(msg);
+            return RestHelper<int>.MakeResponse(0, 0, "success");
+        }
+
+        /// <summary>
+        /// 设备状态反馈
+        /// </summary>
+        /// <param name="model">状态参数</param>
+        /// <returns>控制结果</returns>
+        /// <remarks>
+        /// Sample Request:
+        /// 
+        ///     POST /feedback
+        ///     {
+        ///         "serialNumber": "123456",
+        ///         "deviceType": 1,
+        ///         "controlType": 1,
+        ///         "controlType": 1,
+        ///         "controlType": 1,
+        ///     }
+        /// </remarks>
+        [HttpPost]
+        public ActionResult<ResponseData<int>> Feedback(EquipmentFeedback model)
+        {
+            var msg = JsonSerializer.Serialize<EquipmentFeedback>(model, serializeOptions);
+            this._logger.LogInformation(msg);
+
+            this._messageQueue.PushFeedback(msg);
             return RestHelper<int>.MakeResponse(0, 0, "success");
         }
         #endregion // Action

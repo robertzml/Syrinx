@@ -10,9 +10,15 @@ namespace Syrinx.API.MQ
     public interface IMessageQueue
     {
         /// <summary>
-        /// 推送消息
+        /// 推送控制消息
         /// </summary>
         /// <param name="message">消息内容</param>
-        void Push(string message);
+        void PushControl(string message);
+
+        /// <summary>
+        /// 推送状态反馈消息
+        /// </summary>
+        /// <param name="message">消息内容</param>
+        void PushFeedback(string message);
     }
 }

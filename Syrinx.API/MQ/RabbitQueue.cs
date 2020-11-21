@@ -17,11 +17,6 @@ namespace Syrinx.API.MQ
     public class RabbitQueue : IMessageQueue, IDisposable
     {
         #region Field
-        /// <summary>
-        /// 队列名称
-        /// </summary>
-        private readonly string queueName = "ControlQueue";
-
         private readonly ILogger _logger;
 
         /// <summary>
@@ -62,11 +57,13 @@ namespace Syrinx.API.MQ
 
         #region Method
         /// <summary>
-        /// 推送消息
+        /// 推送控制消息
         /// </summary>
         /// <param name="message">消息内容</param>
-        public void Push(string message)
+        public void PushControl(string message)
         {
+            string queueName = "ControlQueue";
+
             using (var channel = connection.CreateModel())
             {
                 channel.QueueDeclare(queue: queueName, durable: true, exclusive: false, autoDelete: false, arguments: null);
@@ -81,7 +78,33 @@ namespace Syrinx.API.MQ
                                      basicProperties: properties,
                                      body: body);
 
-                this._logger.LogInformation($"publish msg: {message}");
+                this._logger.LogInformation($"publish control msg: {message}");
+            }
+        }
+
+        /// <summary>
+        /// 推送状态反馈消息
+        /// </summary>
+        /// <param name="message">消息内容</param>
+        public void PushFeedback(string message)
+        {
+            string queueName = "FeedbackQueue";
+
+            using (var channel = connection.CreateModel())
+            {
+                channel.QueueDeclare(queue: queueName, durable: true, exclusive: false, autoDelete: false, arguments: null);
+
+                var properties = channel.CreateBasicProperties();
+                properties.Persistent = true;
+
+                var body = Encoding.UTF8.GetBytes(message);
+
+                channel.BasicPublish(exchange: "",
+                                     routingKey: queueName,
+                                     basicProperties: properties,
+                                     body: body);
+
+                this._logger.LogInformation($"publish feedback msg: {message}");
             }
         }
         #endregion //Method
