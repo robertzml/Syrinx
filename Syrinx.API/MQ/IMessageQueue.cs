@@ -20,5 +20,11 @@ namespace Syrinx.API.MQ
         /// </summary>
         /// <param name="message">消息内容</param>
         void PushFeedback(string message);
+
+        /// <summary>
+        /// 推送特殊指令
+        /// </summary>
+        /// <param name="message">消息内容</param>
+        void PushSpecial(string message);
     }
 }

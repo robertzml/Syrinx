@@ -107,6 +107,32 @@ namespace Syrinx.API.MQ
                 this._logger.LogInformation($"publish feedback msg: {message}");
             }
         }
+
+        /// <summary>
+        /// 推送特殊指令
+        /// </summary>
+        /// <param name="message">消息内容</param>
+        public void PushSpecial(string message)
+        {
+            string queueName = "SpecialQueue";
+
+            using (var channel = connection.CreateModel())
+            {
+                channel.QueueDeclare(queue: queueName, durable: true, exclusive: false, autoDelete: false, arguments: null);
+
+                var properties = channel.CreateBasicProperties();
+                properties.Persistent = true;
+
+                var body = Encoding.UTF8.GetBytes(message);
+
+                channel.BasicPublish(exchange: "",
+                                     routingKey: queueName,
+                                     basicProperties: properties,
+                                     body: body);
+
+                this._logger.LogInformation($"publish special msg: {message}");
+            }
+        }
         #endregion //Method
     }
 }

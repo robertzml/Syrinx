@@ -61,8 +61,8 @@ namespace Syrinx.API.Controllers
         ///         "serialNumber": "123456",
         ///         "deviceType": 1,
         ///         "controlType": 1,
-        ///         "controlType": 1,
-        ///         "controlType": 1,
+        ///         "option": 1,
+        ///         "deadline": 1,
         ///      }
         /// </remarks>
         [HttpPost]
@@ -88,8 +88,7 @@ namespace Syrinx.API.Controllers
         ///         "serialNumber": "123456",
         ///         "deviceType": 1,
         ///         "controlType": 1,
-        ///         "controlType": 1,
-        ///         "controlType": 1,
+        ///         "option": 1
         ///     }
         /// </remarks>
         [HttpPost]
@@ -99,6 +98,32 @@ namespace Syrinx.API.Controllers
             this._logger.LogInformation(msg);
 
             this._messageQueue.PushFeedback(msg);
+            return RestHelper<int>.MakeResponse(0, 0, "success");
+        }
+
+        /// <summary>
+        /// 设备特殊指令
+        /// </summary>
+        /// <param name="model">特殊参数</param>
+        /// <returns>控制结果</returns>
+        /// <remarks>
+        /// Sample Request:
+        /// 
+        ///     POST /special
+        ///     {
+        ///         "serialNumber": "123456",
+        ///         "deviceType": 1,
+        ///         "controlType": 1,
+        ///         "option": "D7",
+        ///     }
+        /// </remarks>
+        [HttpPost]
+        public ActionResult<ResponseData<int>> Special(EquipmentSpecial model)
+        {
+            var msg = JsonSerializer.Serialize<EquipmentSpecial>(model, serializeOptions);
+            this._logger.LogInformation(msg);
+
+            // this._messageQueue.PushFeedback(msg);
             return RestHelper<int>.MakeResponse(0, 0, "success");
         }
         #endregion // Action
