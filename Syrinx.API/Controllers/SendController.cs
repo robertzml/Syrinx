@@ -123,7 +123,7 @@ namespace Syrinx.API.Controllers
             var msg = JsonSerializer.Serialize<EquipmentSpecial>(model, serializeOptions);
             this._logger.LogInformation(msg);
 
-            // this._messageQueue.PushFeedback(msg);
+            this._messageQueue.PushSpecial(msg);
             return RestHelper<int>.MakeResponse(0, 0, "success");
         }
         #endregion // Action
