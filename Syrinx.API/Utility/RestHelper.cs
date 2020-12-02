@@ -8,6 +8,10 @@ namespace Syrinx.API.Utility
 {
     using Syrinx.API.Models;
 
+    /// <summary>
+    /// Restful工具类
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class RestHelper<T>
     {
         #region Method
