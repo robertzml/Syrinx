@@ -47,6 +47,10 @@ namespace Syrinx.API
                 var coreXmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml".Replace("API", "Core");  
                 var coreXmlPath = Path.Combine(AppContext.BaseDirectory, coreXmlFile);
                 c.IncludeXmlComments(coreXmlPath);
+
+                var dbXmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml".Replace("API", "DB");
+                var dbXmlPath = Path.Combine(AppContext.BaseDirectory, dbXmlFile);
+                c.IncludeXmlComments(dbXmlPath);
             });
 
             // 注入消息队列
