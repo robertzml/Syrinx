@@ -11,6 +11,7 @@ namespace Syrinx.API.Controllers
     using Syrinx.API.Models;
     using Syrinx.API.Utility;
     using Syrinx.DB.DAL;
+    using Syrinx.DB.Entity;
 
     /// <summary>
     /// 累积数据查询控制器
@@ -38,12 +39,12 @@ namespace Syrinx.API.Controllers
         /// <param name="serialNumber">设备序列号</param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<ResponseData<string>>> GetHotWater(string serialNumber)
+        public async Task<ActionResult<ResponseData<List<Cumulation>>>> GetHotWater(string serialNumber)
         {
             CumulationRepository repository = new CumulationRepository(this._logger);
-            await repository.GetCumulateHotWater(serialNumber);
+            var data = await repository.GetCumulateHotWater(serialNumber);
 
-            return RestHelper<string>.MakeResponse("ok", 0, "success");
+            return RestHelper<List<Cumulation>>.MakeResponse(data, 0, "success");
         }
         #endregion //Action
     }

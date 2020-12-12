@@ -9,6 +9,7 @@ namespace Syrinx.DB.DAL
 {
     using Microsoft.Extensions.Logging;
     using Syrinx.DB.IDAL;
+    using Syrinx.DB.Entity;
 
     public class CumulationRepository : ICumulationRepository
     {
@@ -26,30 +27,38 @@ namespace Syrinx.DB.DAL
         #endregion //Constructor
 
         #region Method
-        public async Task GetCumulateHotWater(string serialNumber)
+        public async Task<List<Cumulation>> GetCumulateHotWater(string serialNumber)
         {
             var influxDBClient = InfluxDBClientFactory.Create("http://47.111.23.211:8086", token);
 
-            var flux = "from(bucket:\"Molan\") |> range(start: -7d) |> filter(fn: (r) => r._measurement == \"cumulative\" and r.serialNumber == \"" + serialNumber + "\" and" +
-                "r._field == \"cumulateHotWater\")";
+            var flux = "from(bucket:\"Molan\") |> range(start: -3d) |> filter(fn: (r) => r._measurement == \"cumulative\" and " +
+                "r.serialNumber == \"" + serialNumber + "\" and r._field == \"cumulateHotWater\")";
 
             var queryApi = influxDBClient.GetQueryApi();
 
             //
             // QueryData
             //
-            var tables = await queryApi.QueryAsync(flux, "sdj");
+            // var tables = await queryApi.QueryAsync(flux, "sdj");
 
-            tables.ForEach(table =>
+            //tables.ForEach(table =>
+            //{
+            //    table.Records.ForEach(record =>
+            //    {
+            //        Console.WriteLine($"{record.GetTime()}: {record.GetValueByKey("_value")}");
+            //        this.logger.LogInformation($"{record.GetTime()}: {record.GetValueByKey("_value")}");
+            //    });
+            //});
+
+            var cumulations = await queryApi.QueryAsync<Cumulation>(flux, "sdj");
+            cumulations.ForEach(r =>
             {
-                table.Records.ForEach(record =>
-                {
-                    Console.WriteLine($"{record.GetTime()}: {record.GetValueByKey("_value")}");
-                    this.logger.LogInformation($"{record.GetTime()}: {record.GetValueByKey("_value")}");
-                });
+                this.logger.LogInformation($"{r.Time}: hot water: {r.HotWater}");
             });
 
             influxDBClient.Dispose();
+
+            return cumulations;
         }
         #endregion //Method
     }
