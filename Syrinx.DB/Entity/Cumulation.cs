@@ -20,8 +20,8 @@ namespace Syrinx.DB.Entity
         [Column("value")] 
         public int HotWater { get; set; }
 
-        //[Column("cumulateWorkTime")]
-        //public int WorkTime { get; set; }
+        [Column("cumulateWorkTime")]
+        public int WorkTime { get; set; }
 
         [Column(IsTimestamp = true)] 
         public DateTime Time { get; set; }
