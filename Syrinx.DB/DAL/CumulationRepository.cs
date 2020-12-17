@@ -14,7 +14,7 @@ namespace Syrinx.DB.DAL
     public class CumulationRepository : ICumulationRepository
     {
         #region Field
-        private string token = "Hc6eaZomSLbT1EQ17y0U9qvQC7ZLI5EIbp3ZzdOltZqOHDzMI36tKYWumbZbbTMT6BLpyY8nJLQ9gdBj-kF1jA==";
+        private string token = "gbyCQceil3fWCfUzeXDPxG2Xa3rUMz3BRG64vyCqGsv2tsEIhCP1xlDszuxqtCBkUAEMrThcpHXI_U3nNHRaSQ==";
 
         private ILogger logger;
         #endregion // Field
@@ -31,10 +31,13 @@ namespace Syrinx.DB.DAL
         {
             var influxDBClient = InfluxDBClientFactory.Create("http://47.111.23.211:8086", token);
 
-            var flux = "from(bucket:\"Molan\") " +
+            var flux = "import \"influxdata/influxdb/schema\" " +
+                "from(bucket:\"Molan\") " +
                 "|> range(start: -1d) " +
                 "|> filter(fn: (r) => r._measurement == \"cumulative\" and r.serialNumber == \"" + serialNumber + "\") " +
-                "|> filter(fn: (r) => r._field == \"cumulateHotWater\" or r._field == \"cumulateWorkTime\")";
+                "|> filter(fn: (r) => r._field == \"cumulateHotWater\" or r._field == \"cumulateWorkTime\") " +
+                "|> schema.fieldsAsCols() " +
+                "|> keep(columns: [\"_time\", \"_measurement\", \"serialNumber\", \"mainboardNumber\", \"cumulateWorkTime\", \"cumulateHotWater\"])";
 
             var queryApi = influxDBClient.GetQueryApi();
 
@@ -45,41 +48,21 @@ namespace Syrinx.DB.DAL
             //
             var tables = await queryApi.QueryAsync(flux, "sdj");
 
-            var len = tables[0].Records.Count;
+            if (tables.Count == 0)
+                return data;
 
-            for (int i = 0; i < len; i++)
+            foreach(var record in tables[0].Records)
             {
                 Cumulation cum = new Cumulation();
-
-                cum.Time = tables[0].Records[i].GetTime().Value.ToDateTimeUtc().ToLocalTime();
-
-                cum.SerialNumber = tables[0].Records[i].GetValueByKey("serialNumber").ToString();
-                cum.HotWater = Convert.ToInt32(tables[0].Records[i].GetValueByKey("_value"));
-                cum.WorkTime = Convert.ToInt32(tables[1].Records[i].GetValueByKey("_value"));
+                cum.Time = record.GetTimeInDateTime().Value.ToLocalTime();
+                cum.SerialNumber = record.GetValueByKey("serialNumber").ToString();
+                cum.HotWater = Convert.ToInt32(record.GetValueByKey("cumulateHotWater"));
+                cum.WorkTime = Convert.ToInt32(record.GetValueByKey("cumulateWorkTime"));
 
                 data.Add(cum);
-
-                this.logger.LogInformation(cum.ToString());
             }
 
-            //tables.ForEach(table =>
-            //{
-            //    table.Records.ForEach(record =>
-            //    {
-            //        Console.WriteLine($"{record.GetTime()}: {record.GetValueByKey("_value")}");
-            //        this.logger.LogInformation($"{record.GetTime()}: {record.GetValueByKey("_value")}");
-            //    });
-            //});
-
-            //var cumulations = await queryApi.QueryAsync<Cumulation>(flux, "sdj");
-            //cumulations.ForEach(r =>
-            //{
-            //    this.logger.LogInformation($"{r.Time}: hot water: {r.HotWater}");
-            //});
-
-            influxDBClient.Dispose();
-
-            //return cumulations;
+            influxDBClient.Dispose();          
 
             return data;
         }
