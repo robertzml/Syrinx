@@ -18,6 +18,8 @@ namespace Syrinx.API
 {
     using Syrinx.API.Options;
     using Syrinx.API.MQ;
+    using Syrinx.DB.IDAL;
+    using Syrinx.DB.DAL;
 
     public class Startup
     {
@@ -33,6 +35,9 @@ namespace Syrinx.API
         {
             // 注入RabbitMQ配置
             services.Configure<RabbitOptions>(Configuration.GetSection("RabbitMQ"));
+
+            // 注入InfluxDB配置
+            services.Configure<InfluxOptions>(Configuration.GetSection("InfluxDB"));
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -55,6 +60,8 @@ namespace Syrinx.API
 
             // 注入消息队列
             services.AddSingleton<IMessageQueue, RabbitQueue>();
+
+            services.AddScoped<ICumulationRepository, CumulationRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

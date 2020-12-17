@@ -16,20 +16,27 @@ namespace Syrinx.DB.DAL
         #region Field
         private string token = "gbyCQceil3fWCfUzeXDPxG2Xa3rUMz3BRG64vyCqGsv2tsEIhCP1xlDszuxqtCBkUAEMrThcpHXI_U3nNHRaSQ==";
 
-        private ILogger logger;
+        private ILogger<CumulationRepository> logger;
         #endregion // Field
 
         #region Constructor
-        public CumulationRepository(ILogger logger)
+        public CumulationRepository(ILogger<CumulationRepository> logger)
         {
             this.logger = logger;
         }
         #endregion //Constructor
 
         #region Method
-        public async Task<List<Cumulation>> GetCumulateHotWater(string serialNumber)
+        /// <summary>
+        /// 获取累积数据
+        /// </summary>
+        /// <param name="serialNumber">设备序列号</param>
+        /// <returns></returns>
+        public async Task<List<Cumulation>> GetCumulativeData(string serialNumber)
         {
             var influxDBClient = InfluxDBClientFactory.Create("http://47.111.23.211:8086", token);
+
+            this.logger.LogInformation("connect to influxdb");
 
             var flux = "import \"influxdata/influxdb/schema\" " +
                 "from(bucket:\"Molan\") " +
@@ -51,7 +58,7 @@ namespace Syrinx.DB.DAL
             if (tables.Count == 0)
                 return data;
 
-            foreach(var record in tables[0].Records)
+            foreach (var record in tables[0].Records)
             {
                 Cumulation cum = new Cumulation();
                 cum.Time = record.GetTimeInDateTime().Value.ToLocalTime();
@@ -62,7 +69,7 @@ namespace Syrinx.DB.DAL
                 data.Add(cum);
             }
 
-            influxDBClient.Dispose();          
+            influxDBClient.Dispose();
 
             return data;
         }

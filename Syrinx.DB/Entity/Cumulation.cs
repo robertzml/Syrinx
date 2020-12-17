@@ -9,20 +9,32 @@ namespace Syrinx.DB.Entity
     using InfluxDB.Client.Core;
 
     /// <summary>
-    /// 累积数据表
+    /// 累积数据类
     /// </summary>
     [Measurement("cumulative")]
     public class Cumulation
     {
+        /// <summary>
+        /// 设备序列号
+        /// </summary>
         [Column("serialNumber", IsTag = true)] 
         public string SerialNumber { get; set; }
 
-        [Column("value")] 
+        /// <summary>
+        /// 累积热水用量
+        /// </summary>
+        [Column("cumulateHotWater")] 
         public int HotWater { get; set; }
 
+        /// <summary>
+        /// 累积工作时间
+        /// </summary>
         [Column("cumulateWorkTime")]
         public int WorkTime { get; set; }
 
+        /// <summary>
+        /// 时间
+        /// </summary>
         [Column(IsTimestamp = true)] 
         public DateTime Time { get; set; }
     }
