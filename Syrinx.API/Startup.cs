@@ -18,6 +18,7 @@ namespace Syrinx.API
 {
     using Syrinx.API.Options;
     using Syrinx.API.MQ;
+    using Syrinx.Base.Options;
     using Syrinx.DB.IDAL;
     using Syrinx.DB.DAL;
 

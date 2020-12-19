@@ -21,6 +21,12 @@ namespace Syrinx.DB.Entity
         public string SerialNumber { get; set; }
 
         /// <summary>
+        /// 主板序列号
+        /// </summary>
+        [Column("mainboardNumber", IsTag = true)]
+        public string MainboardNumber { get; set; }
+
+        /// <summary>
         /// 累积热水用量
         /// </summary>
         [Column("cumulateHotWater")] 

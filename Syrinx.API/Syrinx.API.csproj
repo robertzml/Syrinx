@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Syrinx.Base\Syrinx.Base.csproj" />
     <ProjectReference Include="..\Syrinx.Core\Syrinx.Core.csproj" />
     <ProjectReference Include="..\Syrinx.DB\Syrinx.DB.csproj" />
   </ItemGroup>

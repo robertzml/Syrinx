@@ -7,7 +7,9 @@ using InfluxDB.Client;
 
 namespace Syrinx.DB.DAL
 {
+    using Microsoft.Extensions.Options;
     using Microsoft.Extensions.Logging;
+    using Syrinx.Base.Options;
     using Syrinx.DB.IDAL;
     using Syrinx.DB.Entity;
 
@@ -17,12 +19,15 @@ namespace Syrinx.DB.DAL
         private string token = "gbyCQceil3fWCfUzeXDPxG2Xa3rUMz3BRG64vyCqGsv2tsEIhCP1xlDszuxqtCBkUAEMrThcpHXI_U3nNHRaSQ==";
 
         private ILogger<CumulationRepository> logger;
+
+        private IOptions<InfluxOptions> option;
         #endregion // Field
 
         #region Constructor
-        public CumulationRepository(ILogger<CumulationRepository> logger)
+        public CumulationRepository(ILogger<CumulationRepository> logger, IOptions<InfluxOptions> option)
         {
             this.logger = logger;
+            this.option = option;
         }
         #endregion //Constructor
 
@@ -34,7 +39,7 @@ namespace Syrinx.DB.DAL
         /// <returns></returns>
         public async Task<List<Cumulation>> GetCumulativeData(string serialNumber)
         {
-            var influxDBClient = InfluxDBClientFactory.Create("http://47.111.23.211:8086", token);
+            var influxDBClient = InfluxDBClientFactory.Create(option.Value.Server, option.Value.Token);
 
             this.logger.LogInformation("connect to influxdb");
 
@@ -48,26 +53,9 @@ namespace Syrinx.DB.DAL
 
             var queryApi = influxDBClient.GetQueryApi();
 
-            List<Cumulation> data = new List<Cumulation>();
+            var data = await queryApi.QueryAsync<Cumulation>(flux, option.Value.Org);
 
-            //
-            // QueryData
-            //
-            var tables = await queryApi.QueryAsync(flux, "sdj");
-
-            if (tables.Count == 0)
-                return data;
-
-            foreach (var record in tables[0].Records)
-            {
-                Cumulation cum = new Cumulation();
-                cum.Time = record.GetTimeInDateTime().Value.ToLocalTime();
-                cum.SerialNumber = record.GetValueByKey("serialNumber").ToString();
-                cum.HotWater = Convert.ToInt32(record.GetValueByKey("cumulateHotWater"));
-                cum.WorkTime = Convert.ToInt32(record.GetValueByKey("cumulateWorkTime"));
-
-                data.Add(cum);
-            }
+            data.ForEach(r => r.Time = r.Time.ToLocalTime());
 
             influxDBClient.Dispose();
 

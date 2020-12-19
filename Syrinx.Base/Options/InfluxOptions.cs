@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 
-namespace Syrinx.API.Options
+namespace Syrinx.Base.Options
 {
     /// <summary>
     /// InfluxDB 配置
