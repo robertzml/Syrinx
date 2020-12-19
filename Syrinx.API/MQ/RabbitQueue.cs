@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Syrinx.API.MQ
 {
-    using Syrinx.API.Options;
+    using Syrinx.Base.Options;
 
     /// <summary>
     /// RabbitMQ 实现

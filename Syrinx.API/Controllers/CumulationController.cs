@@ -47,7 +47,7 @@ namespace Syrinx.API.Controllers
         /// <param name="serialNumber">设备序列号</param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<ResponseData<List<Cumulation>>>> GetHotWater(string serialNumber)
+        public async Task<ActionResult<ResponseData<List<Cumulation>>>> List(string serialNumber)
         {
             var data = await cumulationRepository.GetCumulativeData(serialNumber);
 

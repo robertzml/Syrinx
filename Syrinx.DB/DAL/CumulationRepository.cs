@@ -13,14 +13,20 @@ namespace Syrinx.DB.DAL
     using Syrinx.DB.IDAL;
     using Syrinx.DB.Entity;
 
-    public class CumulationRepository : ICumulationRepository
+    /// <summary>
+    /// 累积数据数据访问类
+    /// </summary>
+    public class CumulationRepository : ICumulationRepository, IDisposable
     {
         #region Field
-        private string token = "gbyCQceil3fWCfUzeXDPxG2Xa3rUMz3BRG64vyCqGsv2tsEIhCP1xlDszuxqtCBkUAEMrThcpHXI_U3nNHRaSQ==";
-
         private ILogger<CumulationRepository> logger;
 
         private IOptions<InfluxOptions> option;
+
+        /// <summary>
+        /// InfluxDB 客户端
+        /// </summary>
+        private InfluxDBClient influxClient;
         #endregion // Field
 
         #region Constructor
@@ -28,6 +34,15 @@ namespace Syrinx.DB.DAL
         {
             this.logger = logger;
             this.option = option;
+
+            this.influxClient = InfluxDBClientFactory.Create(option.Value.Server, option.Value.Token);
+            this.logger.LogInformation("connect to influx");
+        }
+
+        public void Dispose()
+        {
+            this.influxClient.Dispose();
+            this.logger.LogInformation("dispose in influx");
         }
         #endregion //Constructor
 
@@ -39,25 +54,18 @@ namespace Syrinx.DB.DAL
         /// <returns></returns>
         public async Task<List<Cumulation>> GetCumulativeData(string serialNumber)
         {
-            var influxDBClient = InfluxDBClientFactory.Create(option.Value.Server, option.Value.Token);
-
-            this.logger.LogInformation("connect to influxdb");
+            this.logger.LogInformation("get data in influxdb");
 
             var flux = "import \"influxdata/influxdb/schema\" " +
                 "from(bucket:\"Molan\") " +
                 "|> range(start: -1d) " +
                 "|> filter(fn: (r) => r._measurement == \"cumulative\" and r.serialNumber == \"" + serialNumber + "\") " +
-                "|> filter(fn: (r) => r._field == \"cumulateHotWater\" or r._field == \"cumulateWorkTime\") " +
-                "|> schema.fieldsAsCols() " +
-                "|> keep(columns: [\"_time\", \"_measurement\", \"serialNumber\", \"mainboardNumber\", \"cumulateWorkTime\", \"cumulateHotWater\"])";
+                "|> schema.fieldsAsCols() ";
 
-            var queryApi = influxDBClient.GetQueryApi();
+            var queryApi = influxClient.GetQueryApi();
 
             var data = await queryApi.QueryAsync<Cumulation>(flux, option.Value.Org);
-
             data.ForEach(r => r.Time = r.Time.ToLocalTime());
-
-            influxDBClient.Dispose();
 
             return data;
         }

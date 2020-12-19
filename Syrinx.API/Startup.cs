@@ -16,7 +16,6 @@ using System.Threading.Tasks;
 
 namespace Syrinx.API
 {
-    using Syrinx.API.Options;
     using Syrinx.API.MQ;
     using Syrinx.Base.Options;
     using Syrinx.DB.IDAL;
@@ -50,7 +49,7 @@ namespace Syrinx.API
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
 
-                var coreXmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml".Replace("API", "Core");  
+                var coreXmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml".Replace("API", "Core");
                 var coreXmlPath = Path.Combine(AppContext.BaseDirectory, coreXmlFile);
                 c.IncludeXmlComments(coreXmlPath);
 
