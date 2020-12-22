@@ -45,8 +45,10 @@ namespace Syrinx.API.Controllers
         /// 获取设备累积用量
         /// </summary>
         /// <param name="serialNumber">设备序列号</param>
-        /// <returns></returns>
-        [HttpGet]
+        /// <returns>
+        /// 累积数据列表
+        /// </returns>
+        [HttpGet]        
         public async Task<ActionResult<ResponseData<List<Cumulation>>>> List(string serialNumber)
         {
             var data = await cumulationRepository.GetCumulativeData(serialNumber);
