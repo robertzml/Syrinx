@@ -17,7 +17,9 @@ namespace Syrinx.DB.IDAL
         /// 获取累积数据
         /// </summary>
         /// <param name="serialNumber">设备序列号</param>
+        /// <param name="start">起始时间</param>
+        /// <param name="stop">截止时间</param>
         /// <returns></returns>
-        Task<List<Cumulation>> GetCumulativeData(string serialNumber);
+        Task<List<Cumulation>> GetCumulativeData(string serialNumber, DateTime start, DateTime stop);
     }
 }

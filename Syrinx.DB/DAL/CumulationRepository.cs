@@ -51,14 +51,16 @@ namespace Syrinx.DB.DAL
         /// 获取累积数据
         /// </summary>
         /// <param name="serialNumber">设备序列号</param>
+        /// <param name="start">起始时间</param>
+        /// <param name="stop">截止时间</param>
         /// <returns></returns>
-        public async Task<List<Cumulation>> GetCumulativeData(string serialNumber)
+        public async Task<List<Cumulation>> GetCumulativeData(string serialNumber, DateTime start, DateTime stop)
         {
             this.logger.LogInformation("get data in influxdb");
 
             var flux = "import \"influxdata/influxdb/schema\" " +
                 "from(bucket:\"Molan\") " +
-                "|> range(start: -1d) " +
+                "|> range(start: " + start.ToString() + ", stop: " + stop.ToString() + ") " +
                 "|> filter(fn: (r) => r._measurement == \"cumulative\" and r.serialNumber == \"" + serialNumber + "\") " +
                 "|> schema.fieldsAsCols() ";
 

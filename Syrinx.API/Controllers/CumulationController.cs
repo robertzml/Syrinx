@@ -45,13 +45,15 @@ namespace Syrinx.API.Controllers
         /// 获取设备累积用量
         /// </summary>
         /// <param name="serialNumber">设备序列号</param>
+        /// <param name="start">起始时间</param>
+        /// <param name="stop">截止时间</param>
         /// <returns>
         /// 累积数据列表
         /// </returns>
-        [HttpGet]        
-        public async Task<ActionResult<ResponseData<List<Cumulation>>>> List(string serialNumber)
+        [HttpGet]
+        public async Task<ActionResult<ResponseData<List<Cumulation>>>> List(string serialNumber, DateTime start, DateTime stop)
         {
-            var data = await cumulationRepository.GetCumulativeData(serialNumber);
+            var data = await cumulationRepository.GetCumulativeData(serialNumber, start, stop);
 
             return RestHelper<List<Cumulation>>.MakeResponse(data, 0, "success");
         }
