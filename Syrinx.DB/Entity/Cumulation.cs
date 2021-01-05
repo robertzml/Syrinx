@@ -31,31 +31,31 @@ namespace Syrinx.DB.Entity
         /// <summary>
         /// 累积热水用量
         /// </summary>
-        [Column("cumulateHotWater")] 
+        [Column("cumulativeHotWater")] 
         public int CumulativeHotWater { get; set; }
 
         /// <summary>
         /// 累积工作时间
         /// </summary>
-        [Column("cumulateWorkTime")]
+        [Column("cumulativeWorkTime")]
         public int CumulativeWorkTime { get; set; }
 
         /// <summary>
         /// 累积加热时间
         /// </summary>
-        [Column("cumulateHeatTime")]
+        [Column("cumulativeHeatTime")]
         public int CumulativeHeatTime { get; set; }
 
         /// <summary>
         /// 累积使用电量
         /// </summary>
-        [Column("cumulateUsedPower")]
+        [Column("cumulativeUsedPower")]
         public int CumulativeUsedPower { get; set; }
 
         /// <summary>
         /// 累积节省电量
         /// </summary>
-        [Column("cumulateSavedPower")]
+        [Column("cumulativeSavedPower")]
         public int CumulativeSavedPower { get; set; }
 
         /// <summary>

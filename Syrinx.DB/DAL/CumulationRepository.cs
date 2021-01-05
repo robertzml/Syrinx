@@ -58,9 +58,15 @@ namespace Syrinx.DB.DAL
         {
             this.logger.LogInformation("get data in influxdb");
 
+            DateTimeOffset dtoStart = new DateTimeOffset(start);
+            var s1 = dtoStart.ToUnixTimeSeconds();
+
+            DateTimeOffset dtoStop = new DateTimeOffset(stop);
+            var s2 = dtoStop.ToUnixTimeSeconds();
+
             var flux = "import \"influxdata/influxdb/schema\" " +
                 "from(bucket:\"Molan\") " +
-                "|> range(start: " + start.ToString() + ", stop: " + stop.ToString() + ") " +
+                "|> range(start: " + s1.ToString() + ", stop: " + s2.ToString() + ") " +
                 "|> filter(fn: (r) => r._measurement == \"cumulative\" and r.serialNumber == \"" + serialNumber + "\") " +
                 "|> schema.fieldsAsCols() ";
 
