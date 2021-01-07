@@ -51,16 +51,24 @@ namespace Syrinx.DB.DAL
         /// 获取报警数据
         /// </summary>
         /// <param name="serialNumber">设备序列号</param>
+        /// <param name="start">起始时间</param>
+        /// <param name="stop">截止时间</param>
         /// <returns>
         /// 报警数据列表
         /// </returns>
-        public async Task<List<Alarm>> GetAlarmData(string serialNumber)
+        public async Task<List<Alarm>> GetAlarmData(string serialNumber, DateTime start, DateTime stop)
         {
             this.logger.LogInformation("get alarm data in influxdb");
 
+            DateTimeOffset dtoStart = new DateTimeOffset(start);
+            var s1 = dtoStart.ToUnixTimeSeconds();
+
+            DateTimeOffset dtoStop = new DateTimeOffset(stop);
+            var s2 = dtoStop.ToUnixTimeSeconds();
+
             var flux = "import \"influxdata/influxdb/schema\" " +
                 "from(bucket:\"Molan\") " +
-                "|> range(start: -1d) " +
+                "|> range(start: " + s1.ToString() + ", stop: " + s2.ToString() + ") " +
                 "|> filter(fn: (r) => r._measurement == \"alarm\" and r.serialNumber == \"" + serialNumber + "\") " +
                 "|> schema.fieldsAsCols() ";
 

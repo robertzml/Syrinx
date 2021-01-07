@@ -17,7 +17,9 @@ namespace Syrinx.DB.IDAL
         /// 获取报警数据
         /// </summary>
         /// <param name="serialNumber">设备序列号</param>
+        /// <param name="start">起始时间</param>
+        /// <param name="stop">截止时间</param>
         /// <returns></returns>
-        Task<List<Alarm>> GetAlarmData(string serialNumber);
+        Task<List<Alarm>> GetAlarmData(string serialNumber, DateTime start, DateTime stop);
     }
 }
