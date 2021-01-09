@@ -45,5 +45,9 @@ namespace Syrinx.DB.DAL
             this.logger.LogInformation("dispose in influx");
         }
         #endregion //Constructor
+
+        #region Method
+
+        #endregion //Method
     }
 }

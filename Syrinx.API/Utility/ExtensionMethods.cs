@@ -26,6 +26,7 @@ namespace Syrinx.API.Utility
         {
             services.AddScoped<ICumulationRepository, CumulationRepository>();
             services.AddScoped<IAlarmRepository, AlarmRepository>();
+            services.AddScoped<IBasicRepository, BasicRepository>();
 
             return services;
         }
