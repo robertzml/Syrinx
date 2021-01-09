@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace Syrinx.API.Controllers
 {
@@ -18,6 +19,17 @@ namespace Syrinx.API.Controllers
     [ApiController]
     public class HealthController : ControllerBase
     {
+        #region Field
+        private ILogger<HealthController> _logger;
+        #endregion //Field
+
+        #region Constructor
+        public HealthController(ILogger<HealthController> logger)
+        {
+            this._logger = logger;
+        }
+        #endregion //Constructor
+
         #region Action
         /// <summary>
         /// 健康检查
@@ -26,6 +38,7 @@ namespace Syrinx.API.Controllers
         [HttpGet]
         public ActionResult<ResponseData<string>> Check()
         {
+            this._logger.LogInformation("health check");
             return RestHelper<string>.MakeResponse("ok", 0, "success");
         }
         #endregion //Action
