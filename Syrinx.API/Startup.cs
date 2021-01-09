@@ -16,9 +16,8 @@ using System.Threading.Tasks;
 
 namespace Syrinx.API
 {
+    using Syrinx.API.Utility;
     using Syrinx.Base.Options;
-    using Syrinx.DB.IDAL;
-    using Syrinx.DB.DAL;
     using Syrinx.MQ.Service;
 
     public class Startup
@@ -61,8 +60,8 @@ namespace Syrinx.API
             // 注入消息队列
             services.AddSingleton<IMessageQueue, RabbitQueue>();
 
-            services.AddScoped<ICumulationRepository, CumulationRepository>();
-            services.AddScoped<IAlarmRepository, AlarmRepository>();
+            // 注入业务类
+            services.AddDataService();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

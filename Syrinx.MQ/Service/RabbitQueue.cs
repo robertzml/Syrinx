@@ -41,6 +41,8 @@ namespace Syrinx.MQ.Service
                 };
 
                 this.connection = factory.CreateConnection();
+
+                this._logger.LogInformation("create connection");
             }
             catch (Exception ex)
             {
