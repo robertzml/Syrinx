@@ -7,9 +7,9 @@ using System.Text.Unicode;
 namespace Syrinx.API.Controllers
 {
     using Syrinx.API.Models;
-    using Syrinx.API.MQ;
     using Syrinx.API.Utility;
-    using Syrinx.Core.Entity;
+    using Syrinx.MQ.Entity;
+    using Syrinx.MQ.Service;
 
     /// <summary>
     /// 设备操作下发控制器

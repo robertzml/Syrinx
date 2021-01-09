@@ -7,7 +7,7 @@ using RabbitMQ.Client.Events;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Logging;
 
-namespace Syrinx.API.MQ
+namespace Syrinx.MQ.Service
 {
     using Syrinx.Base.Options;
 

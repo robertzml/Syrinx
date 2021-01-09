@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Syrinx.Core.Entity
+namespace Syrinx.MQ.Entity
 {
     /// <summary>
     /// 设备状态反馈类

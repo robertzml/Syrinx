@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Syrinx.API.MQ
+namespace Syrinx.MQ.Service
 {
     /// <summary>
     /// 消息队列接口

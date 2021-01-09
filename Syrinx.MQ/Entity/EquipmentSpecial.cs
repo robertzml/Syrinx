@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
-namespace Syrinx.Core.Entity
+namespace Syrinx.MQ.Entity
 {
     /// <summary>
-    /// 设备控制操作类
+    /// 设备特殊控制
     /// </summary>
-    public class EquipmentControl
+    public class EquipmentSpecial
     {
         #region Property
         /// <summary>
@@ -33,12 +35,7 @@ namespace Syrinx.Core.Entity
         /// 控制参数
         /// </summary>
         [Required]
-        public int Option { get; set; }
-
-        /// <summary>
-        /// 允许使用时间(时间戳)
-        /// </summary>
-        public long Deadline { get; set; }
+        public string Option { get; set; }
         #endregion //Property
     }
 }

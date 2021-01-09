@@ -16,10 +16,10 @@ using System.Threading.Tasks;
 
 namespace Syrinx.API
 {
-    using Syrinx.API.MQ;
     using Syrinx.Base.Options;
     using Syrinx.DB.IDAL;
     using Syrinx.DB.DAL;
+    using Syrinx.MQ.Service;
 
     public class Startup
     {
@@ -49,9 +49,9 @@ namespace Syrinx.API
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
 
-                var coreXmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml".Replace("API", "Core");
-                var coreXmlPath = Path.Combine(AppContext.BaseDirectory, coreXmlFile);
-                c.IncludeXmlComments(coreXmlPath);
+                var mqXmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml".Replace("API", "MQ");
+                var mqXmlPath = Path.Combine(AppContext.BaseDirectory, mqXmlFile);
+                c.IncludeXmlComments(mqXmlPath);
 
                 var dbXmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml".Replace("API", "DB");
                 var dbXmlPath = Path.Combine(AppContext.BaseDirectory, dbXmlFile);
