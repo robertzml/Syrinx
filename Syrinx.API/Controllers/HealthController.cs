@@ -39,7 +39,7 @@ namespace Syrinx.API.Controllers
         public ActionResult<ResponseData<string>> Check()
         {
             this._logger.LogInformation("health check");
-            return RestHelper<string>.MakeResponse("ok", 0, "success");
+            return RestHelper<string>.MakeSuccess("ok");
         }
         #endregion //Action
     }

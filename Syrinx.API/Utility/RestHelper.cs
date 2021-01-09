@@ -44,6 +44,16 @@ namespace Syrinx.API.Utility
 
             return data;
         }
+
+        /// <summary>
+        /// 生成成功返回
+        /// </summary>
+        /// <param name="result">实体数据</param>
+        /// <returns></returns>
+        public static ResponseData<T> MakeSuccess(T result)
+        {
+            return MakeResponse(result, 0, "success");
+        }
         #endregion //Method
     }
 }
